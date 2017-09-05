@@ -1,0 +1,35 @@
+<html>
+    <body>
+        <script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'>
+        </script>
+        <script src='./cloud-storage.js'></script>
+        <script src='./dropbox-backend.js'></script>
+        <script>
+            window.onload = function () {
+                // setFileSystem( JSONFileSystem( {
+                //     type : 'folder',
+                //     contents : {
+                //         'example.txt' : {
+                //             type : 'file',
+                //             contents : 'This\nis\nexample\ntext.'
+                //         },
+                //         'example.py' : {
+                //             type : 'file',
+                //             contents : 'print( "Hello world." )'
+                //         },
+                //         'example folder' : {
+                //             type : 'folder',
+                //             contents : {
+                //                 'to do list.txt' : {
+                //                     type : 'file',
+                //                     contents : 'Wash dishes\nClean garage'
+                //                 }
+                //             }
+                //         }
+                //     }
+                // } ) );
+                setFileSystem( new DropboxFileSystem( '7mfyk58haigi2c4' ) );
+            };
+        </script>
+    </body>
+</html>

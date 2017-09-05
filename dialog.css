@@ -1,0 +1,16 @@
+
+body {
+    margin: 0;
+}
+
+#buttonsFooter {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: right;
+    background-color: #eee;
+}
+
+.selectedItem {
+    background-color: #eee;
+}

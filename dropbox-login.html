@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'>
+        </script>
+        <script>
+            // Some of this code is taken from the Dropbox SDK examples
+            // folder, "auth" example, with changes.  Thanks, Drobpox!
+
+            window.addEventListener( 'message', function ( event ) {
+                if ( event.data[0] == 'setClientID' ) {
+                    var D = new Dropbox( { clientId : event.data[1] } );
+                    window.location.href =
+                        D.getAuthenticationUrl( window.location.href );
+                }
+            } );
+
+            function parseQueryString ( str ) {
+                var ret = Object.create( null );
+                if ( typeof str !== 'string' ) return ret;
+                str = str.trim().replace( /^(\?|#|&)/, '' );
+                if ( !str ) return ret;
+                str.split( '&' ).forEach( function ( param ) {
+                    var parts = param.replace( /\+/g, ' ' ).split( '=' );
+                    var key = parts.shift();
+                    var val = parts.length > 0 ? parts.join( '=' )
+                                               : undefined;
+                    key = decodeURIComponent( key );
+                    val = val === undefined ? null
+                                            : decodeURIComponent(val);
+                    if ( ret[key] === undefined ) {
+                        ret[key] = val;
+                    } else if ( Array.isArray( ret[key] ) ) {
+                        ret[key].push(val);
+                    } else {
+                        ret[key] = [ret[key], val];
+                    }
+                } );
+                return ret;
+            }
+
+            var hashData = parseQueryString( window.location.hash );
+            if ( hashData.access_token )
+                window.opener.postMessage(
+                    JSON.stringify( [ 'dialogLogin', hashData ] ), '*' );
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
