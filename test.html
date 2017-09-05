@@ -12,6 +12,45 @@ A page for testing the cloud storage module defined in this repository.
         <script src='./dropbox-backend.js'></script>
     </head>
     <body>
+        <!--
+        Users will click the following buttons to test the appliaction.
+        "Use static file system" chooses a JSON-based example filesystem
+        that does not accept saving files.
+        "Use Dropbox file system" chooses a filesystem that require the
+        user to log in to his/her Dropbox.
+        "Test opening a file" loads a file from the chosen filesystem into
+        the left of two text areas, showing success/failure messages in the
+        other text area.
+        "Test saving a file" saves the contents of the left text area into
+        the filesystem, putting success/failure messages in the other text
+        area.
+        -->
+        <p>
+            <input type='button' value='Use static file system'
+                   onclick='setFileSystem(staticFS);alert("Using static file system.");'/>
+            <input type='button' value='Use Dropbox file system'
+                   onclick='setFileSystem(dropboxFS);alert("Using Dropbox file system.");'/>
+            <input type='button' value='Test opening a file'
+                   onclick='testOpenFile();'/>
+            <input type='button' value='Test saving a file'
+                   onclick='testSaveFile();'/>
+        </p>
+
+        <!--
+        The two text areas:
+        -->
+        <textarea id='fileContents' rows=10 cols=40
+        >If you open a file, its text will go here.
+
+Text you type here will be saved when you choose to save a file.</textarea>
+
+        <textarea id='messagesPane' rows=10 cols=40 readonly
+        >Success or failure messages will go here.</textarea>
+
+        <!--
+        Event handler scripts supporting all the controls above, with some
+        global variable initializations first.
+        -->
         <script>
             // Define a static filesystem for use when testing.
             var staticFS = JSONFileSystem( {
@@ -45,7 +84,56 @@ A page for testing the cloud storage module defined in this repository.
             // When the page loads, initialize the filesystem to the
             // Dropbox one.  Change this code if you want to test the static
             // filesystem instead.
-            window.onload = function () { setFileSystem( dropboxFS ); }
+            window.onload = function () { setFileSystem( staticFS ); }
+
+            // Convenience functions for reading and writing to the two
+            // text areas in the app.
+            function getEditor () {
+                return document.getElementById( 'fileContents' ).value;
+            }
+            function setEditor ( content ) {
+                document.getElementById( 'fileContents' ).value = content;
+            }
+            function setMessages ( heading, resultType, data ) {
+                document.getElementById( 'messagesPane' ).value =
+                    ( heading ? heading + '\n\n' : '' )
+                  + ( resultType ? resultType + ':\n\n' : '' )
+                  + ( data ? JSON.stringify( data, null, 4 ) : '' );
+            }
+
+            // Event handler when the user clicks "Test opening a file."
+            // In the various success and failure callbacks, populate one or
+            // both of the two textareas with the results.
+            function testOpenFile () {
+                openFile( function ( chosenFile ) {
+                    chosenFile.get( function ( content ) {
+                        setMessages( 'User chose: ' + chosenFile.path, null,
+                                     'File loaded successfully' );
+                        setEditor( content );
+                    }, function ( error ) {
+                        setMessages( 'User chose: ' + chosenFile.path,
+                                     'Error', error );
+                    } );
+                }, function ( error ) {
+                    setMessages( null, 'Error', error );
+                } );
+            }
+            // Event handler when the user clicks "Test saving a file."
+            // In the various success and failure callbacks, populate one or
+            // both of the two textareas with the results.
+            function testSaveFile () {
+                saveFile( function ( destination ) {
+                    destination.update( getEditor(), function ( result ) {
+                        setMessages( 'Destination: ' + destination.path,
+                                     'Success', result );
+                    }, function ( error ) {
+                        setMessages( 'Destination: ' + destination.path,
+                                     'Error', error );
+                    } );
+                }, function ( error ) {
+                    setMessages( null, 'Error', error );
+                } );
+            }
         </script>
     </body>
 </html>
