@@ -20,8 +20,8 @@
  *     readFile ( fullPath, successCB, failureCB ) -- reads a file and
  *         calls the success callback with its contents as text on success,
  *         or the failure callback with error details on failure.
- *     writeFile ( fullPath, successCB, failureCB ) -- writes a file and
- *         calls one of the callbacks, optionally passing details.
+ *     writeFile ( fullPath, content, successCB, failureCB ) -- writes a
+ *         file and calls one of the callbacks, optionally passing details.
  *
  * An example of an object providing these four methods in a simple context
  * is the `JSONFileSystem` defined at the end of this file.
@@ -347,14 +347,14 @@ function JSONFileSystem ( jsonObject )
          * Find file and return contents if it exists
          */
         readFile : function ( fullPath, successCB, failureCB ) {
-            try { successCB( find( fullPath, 'file' ) ); }
+            try { successCB( find( fullPath, 'file' ).contents ); }
             catch ( error ) { failureCB( error ); }
         },
         /*
          * Always fail; this is a read-only filesystem
          * (It's just for testing/debugging.)
          */
-        writeFile : function ( fullPath, successCB, failureCB ) {
+        writeFile : function ( fullPath, content, successCB, failureCB ) {
             failureCB( 'Cannot write to a static filesystem' );
         }
     }
