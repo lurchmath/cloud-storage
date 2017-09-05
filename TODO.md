@@ -30,6 +30,9 @@ I list them in this file.
 
  * Add a `LocalStorage` option in a new file, `localstorage-backend.js`,
    much like `dropbox-backend.js`, but less complex.
+ * The [Dropbox back end](dropbox-backend.js) does not call the failure
+   callback if the user cancels the login.  I don't yet know how to do this.
+   Figure out how and call the failure callback in such cases.
 
 ## New features
 
