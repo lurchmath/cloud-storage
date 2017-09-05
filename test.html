@@ -1,35 +1,51 @@
+<!--
+A page for testing the cloud storage module defined in this repository.
+-->
 <html>
-    <body>
+    <head>
+        <!-- Import the cloud storage module. -->
+        <script src='./cloud-storage.js'></script>
+        <!-- We aim to test the Dropbox backend, so we need its SDK. -->
         <script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'>
         </script>
-        <script src='./cloud-storage.js'></script>
+        <!-- Now that Dropbox is defined, import the Dropbox back end. -->
         <script src='./dropbox-backend.js'></script>
+    </head>
+    <body>
         <script>
-            window.onload = function () {
-                // setFileSystem( JSONFileSystem( {
-                //     type : 'folder',
-                //     contents : {
-                //         'example.txt' : {
-                //             type : 'file',
-                //             contents : 'This\nis\nexample\ntext.'
-                //         },
-                //         'example.py' : {
-                //             type : 'file',
-                //             contents : 'print( "Hello world." )'
-                //         },
-                //         'example folder' : {
-                //             type : 'folder',
-                //             contents : {
-                //                 'to do list.txt' : {
-                //                     type : 'file',
-                //                     contents : 'Wash dishes\nClean garage'
-                //                 }
-                //             }
-                //         }
-                //     }
-                // } ) );
-                setFileSystem( new DropboxFileSystem( '7mfyk58haigi2c4' ) );
-            };
+            // Define a static filesystem for use when testing.
+            var staticFS = JSONFileSystem( {
+                type : 'folder',
+                contents : {
+                    'example.txt' : {
+                        type : 'file',
+                        contents : 'This\nis\nexample\ntext.'
+                    },
+                    'example.py' : {
+                        type : 'file',
+                        contents : 'print( "Hello world." )'
+                    },
+                    'example folder' : {
+                        type : 'folder',
+                        contents : {
+                            'to do list.txt' : {
+                                type : 'file',
+                                contents : 'Wash dishes\nClean garage'
+                            }
+                        }
+                    }
+                }
+            } );
+            // Define a Dropbox filesystem for use when testing.  The
+            // constructor requires the app key.  The code below includes
+            // one of my app keys.  You should use yours, since my app will
+            // not permit redirection to your site.
+            var dropboxFS = new DropboxFileSystem( '7mfyk58haigi2c4' );
+
+            // When the page loads, initialize the filesystem to the
+            // Dropbox one.  Change this code if you want to test the static
+            // filesystem instead.
+            window.onload = function () { setFileSystem( dropboxFS ); }
         </script>
     </body>
 </html>

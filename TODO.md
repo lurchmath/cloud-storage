@@ -7,7 +7,7 @@ I list them in this file.
 
 ## Code style
 
- * The [cloud-storage.js file](cloud-storage.js) define functions at global
+ * The [cloud-storage.js file](cloud-storage.js) defines functions at global
    scope.  Use IIFEs to hide all but the few functions that the module
    should be exposing as its interface.
 
@@ -28,6 +28,10 @@ I list them in this file.
 
 ## Missing pieces
 
+ * The [test.html](test.html) page expects the user to test the software by
+   making calls to `openFile()` and `saveFile()` on the browser's developer
+   console.  That's a very confusing (and blank!) test page, so add some
+   explanation and buttons to make it easier to run tests.
  * Add a `LocalStorage` option in a new file, `localstorage-backend.js`,
    much like `dropbox-backend.js`, but less complex.
  * The [Dropbox back end](dropbox-backend.js) does not call the failure
