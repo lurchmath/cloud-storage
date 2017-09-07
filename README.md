@@ -27,11 +27,11 @@ To add a new backend, mimic the work done in
 
 ## Example
 
-Clone this repository to your hard drive, serve it up with
-`python -m SimpleHTTPServer 8000` in the repository folder and visit
-[http://localhost:8000/test.html](http://localhost:8000/test.html).
+See the [simple test
+page](http://lurchmath.github.io/cloud-storage/test.html) for an example of
+how the various storage options and functions work.
 
-To see how that page works, read [its documented source code](test.html).
+The source code for that page [is documented with comments](test.html).
 
 ## Usage
 
