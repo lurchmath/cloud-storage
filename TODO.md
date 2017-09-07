@@ -19,9 +19,3 @@ I list them in this file.
     * In that same HTML file you will find the IDs for the files list and
       buttons footer.
     * Other tidbits appear in the existing [dialog.css](dialog.css) file.
-
-## Missing pieces
-
- * The [Dropbox back end](dropbox-backend.js) does not call the failure
-   callback if the user cancels the login.  I don't yet know how to do this.
-   Figure out how and call the failure callback in such cases.

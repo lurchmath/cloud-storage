@@ -55,10 +55,14 @@ DropboxFileSystem.prototype.getAccess = function ( successCB, failureCB )
                 if ( command == 'dialogLogin' ) {
                     loginWindow.close();
                     that.accountData = message.shift();
-                    that.dropbox = new Dropbox( {
-                        accessToken : that.accountData.access_token
-                    } );
-                    successCB();
+                    if ( that.accountData.access_token ) {
+                        that.dropbox = new Dropbox( {
+                            accessToken : that.accountData.access_token
+                        } );
+                        successCB();
+                    } else {
+                        failureCB( that.accountData );
+                    }
                 }
             } catch ( e ) { }
         } );

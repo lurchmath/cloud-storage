@@ -47,7 +47,7 @@ two functions, about half way through [cloud-storage.js](cloud-storage.js).
 
 ## Status
 
-There are several things that need to be improved about this project.
+There are a few things that need to be improved about this project.
 See [the to-do list](TODO.md) for details.
 
 ## License

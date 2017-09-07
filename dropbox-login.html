@@ -99,7 +99,7 @@ to the originating window/tab.
              * use that information to access the user's Dropbox.
              */
             var hashData = parseQueryString( window.location.hash );
-            if ( hashData.access_token )
+            if ( hashData.access_token || hashData.error )
                 window.opener.postMessage(
                     JSON.stringify( [ 'dialogLogin', hashData ] ), '*' );
         </script>
