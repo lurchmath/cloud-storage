@@ -275,7 +275,6 @@ function saveFile ( successCB, failureCB )
  * A folder is an object with `type:'folder'` and `contents` mapping to an
  * object whose keys are names and whose values are files or folders.
  * A JSON filesystem is a folder object serving as the root.
- * JSON filesystems are static, just used for testing; no need to be fancy.
  *
  * Example:
  *
@@ -351,11 +350,36 @@ function JSONFileSystem ( jsonObject )
             catch ( error ) { failureCB( error ); }
         },
         /*
-         * Always fail; this is a read-only filesystem
-         * (It's just for testing/debugging.)
+         * There are several cases, each handled with comments inline below.
          */
         writeFile : function ( fullPath, content, successCB, failureCB ) {
-            failureCB( 'Cannot write to a static filesystem' );
+            try {
+                var existingFile = find( fullPath, 'file' );
+                // The file exists, great!  Just change its contents:
+                existingFile.contents = content;
+                successCB( 'File updated successfully.' );
+            } catch ( error ) {
+                if ( /Could not find/.test( error ) ) {
+                    // The file does not exist.
+                    // Does its parent folder exist?  Let's check.
+                    try {
+                        var fileName = fullPath.pop();
+                        var parentFolder = find( fullPath, 'folder' );
+                        // Yes, it exists!  Create a new file there.
+                        parentFolder.contents[fileName] = {
+                            type : 'file',
+                            contents : content
+                        };
+                        successCB( 'File written successfully.' );
+                    } catch ( error ) {
+                        // Parent folder doesn't exist.  Signal an error.
+                        failureCB( error );
+                    }
+                } else {
+                    // Some other error we can't solve.  Propagate it.
+                    failureCB( error );
+                }
+            }
         }
     }
 }
