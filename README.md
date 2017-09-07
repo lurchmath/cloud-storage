@@ -8,6 +8,34 @@ standard dialogs for "File > Open" and "File > Save as..." and "File > Save"
 then this is the module for you.  If you have more advanced needs, you will
 need a different toolkit.
 
+## Usage
+
+Import the relevant files into your page.  You can use a CDN, like so:
+```html
+<!-- The main file, essential: -->
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1.0.0/cloud-storage.js'></script>
+<!-- If you want the Dropbox backend, which you probably do: -->
+<script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1.0.0/dropbox-backend.js'></script>
+<!-- If you want the LocalStorage backend also: -->
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1.0.0/localstorage-backend.js'></script>
+```
+
+Call `openFile()` or `saveFile()`.  That's it!  Obviously, you'll want to
+pass parameters to those functions to customize what to save or what to do
+with opened files, so you should see the example in the next section, or the
+documented source code for those two functions, about half way through
+[cloud-storage.js](cloud-storage.js).
+
+## Example
+
+See the [simple test
+page](http://lurchmath.github.io/cloud-storage/test.html) for an example of
+how the various storage options and functions work.
+
+The source code for that page [is documented with
+comments](https://github.com/lurchmath/cloud-storage/blob/master/test.html).
+
 ## Status
 
 Right now three data storage backends are supported.
@@ -24,31 +52,9 @@ Right now three data storage backends are supported.
 
 To add a new backend, mimic the work done in
 [dropbox-backend.js](dropbox-backend.js) and create your own backend.
+Cloud storage providers besides Dropbox are welcome!
 
-## Example
-
-See the [simple test
-page](http://lurchmath.github.io/cloud-storage/test.html) for an example of
-how the various storage options and functions work.
-
-The source code for that page [is documented with
-comments](https://github.com/lurchmath/cloud-storage/blob/master/test.html).
-
-## Usage
-
-Import [cloud-storage.js](cloud-storage.js) into your page.  If you want to
-use the Dropbox backend, you'll need to also import
-[the Dropbox SDK](https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js) and
-[dropbox-backend.js](dropbox-backend.js) (in that order).
-
-Call `openFile()` or `saveFile()`.  That's it!  Obviously, you'll want to
-pass parameters to those functions to customize what to save or what to do
-with opened files, so you should see the documented source code for those
-two functions, about half way through [cloud-storage.js](cloud-storage.js).
-
-## Status
-
-There are a few things that need to be improved about this project.
+There are other things that could be improved about this project.
 See [the to-do list](TODO.md) for details.
 
 ## License
