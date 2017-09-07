@@ -31,7 +31,8 @@ See the [simple test
 page](http://lurchmath.github.io/cloud-storage/test.html) for an example of
 how the various storage options and functions work.
 
-The source code for that page [is documented with comments](test.html).
+The source code for that page [is documented with
+comments](https://github.com/lurchmath/cloud-storage/blob/master/test.html).
 
 ## Usage
 
