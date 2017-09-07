@@ -10,14 +10,19 @@ A page for testing the cloud storage module defined in this repository.
         </script>
         <!-- Now that Dropbox is defined, import the Dropbox back end. -->
         <script src='./dropbox-backend.js'></script>
+        <!-- Import the LocalStorage back end. -->
+        <script src='./localstorage-backend.js'></script>
     </head>
     <body>
         <!--
         Users will click the following buttons to test the appliaction.
-        "Use static file system" chooses a JSON-based example filesystem
-        that does not accept saving files.
+        "Use JSON file system" creates a simple JSON-based example
+        filesystem.
         "Use Dropbox file system" chooses a filesystem that require the
         user to log in to his/her Dropbox.
+        "Use LocalStorage file system" uses a flat (root folder only)
+        filesystem that contains no files (at first, though the user may
+        save some there, and they persist).
         "Test opening a file" loads a file from the chosen filesystem into
         the left of two text areas, showing success/failure messages in the
         other text area.
@@ -26,10 +31,12 @@ A page for testing the cloud storage module defined in this repository.
         area.
         -->
         <p>
-            <input type='button' value='Use static file system'
-                   onclick='setFileSystem(staticFS);alert("Using static file system.");'/>
+            <input type='button' value='Use JSON file system'
+                   onclick='setFileSystem(JSONFS);alert("Using JSON file system.");'/>
             <input type='button' value='Use Dropbox file system'
                    onclick='setFileSystem(dropboxFS);alert("Using Dropbox file system.");'/>
+            <input type='button' value='Use LocalStorage file system'
+                   onclick='setFileSystem(LSFS);alert("Using LocalStorage file system.");'/>
             <input type='button' value='Test opening a file'
                    onclick='testOpenFile();'/>
             <input type='button' value='Test saving a file'
@@ -52,8 +59,8 @@ Text you type here will be saved when you choose to save a file.</textarea>
         global variable initializations first.
         -->
         <script>
-            // Define a static filesystem for use when testing.
-            var staticFS = JSONFileSystem( {
+            // Define a JSON filesystem for use when testing.
+            var JSONFS = JSONFileSystem( {
                 type : 'folder',
                 contents : {
                     'example.txt' : {
@@ -80,11 +87,14 @@ Text you type here will be saved when you choose to save a file.</textarea>
             // one of my app keys.  You should use yours, since my app will
             // not permit redirection to your site.
             var dropboxFS = new DropboxFileSystem( '7mfyk58haigi2c4' );
+            // Define a LocalStorage filesystem for use when testing.  The
+            // constructor requires no parameters, so this is easy.
+            var LSFS = new LocalStorageFileSystem();
 
             // When the page loads, initialize the filesystem to the
-            // Dropbox one.  Change this code if you want to test the static
+            // Dropbox one.  Change this code if you want to test the JSON
             // filesystem instead.
-            window.onload = function () { setFileSystem( staticFS ); }
+            window.onload = function () { setFileSystem( JSONFS ); }
 
             // Convenience functions for reading and writing to the two
             // text areas in the app.

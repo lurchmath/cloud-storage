@@ -10,11 +10,17 @@ need a different toolkit.
 
 ## Status
 
-Right now only two data storage backends are supported.
+Right now three data storage backends are supported.
 
  * [Dropbox](http://dropbox.com)
- * A static, JSON-based filesystem that is of little use in applications,
-   but is a nice example for developers and testers.
+ * A JSON-based filesystem that is of little use in applications (because it
+   exists only in memory while the page is loaded, and thus is not
+   persistent) but is a nice example for developers and testers.
+ * A LocalStorage-based filesystem that does persist across page loads, but
+   is only one flat folder (no ability to create subfolders) due to the
+   simple API exposed by this library.  (The intent is not to expose folder
+   manipulation tools, because cloud storage platforms already do so, thus
+   keeping the API here very simple.)
 
 To add a new backend, mimic the work done in
 [dropbox-backend.js](dropbox-backend.js) and create your own backend.
