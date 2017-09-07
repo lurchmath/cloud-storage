@@ -25,13 +25,3 @@ I list them in this file.
  * The [Dropbox back end](dropbox-backend.js) does not call the failure
    callback if the user cancels the login.  I don't yet know how to do this.
    Figure out how and call the failure callback in such cases.
-
-## New features
-
- * Make it so that the user can provide his or her own iframe to use for
-   the popup dialogs, rather than having
-   [cloud-storage.js](cloud-storage.js) use its own.  The user should be
-   able to specify the iframe as many times as they like, so that they can
-   provide a new iframe immediately before each call to `openFile()` or
-   `saveFile()`, for example.  This will work well for integration into
-   TinyMCE.

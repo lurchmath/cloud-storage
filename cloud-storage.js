@@ -43,26 +43,28 @@ var popupDialog;
 function showDialog () { popupDialog.style.display = 'block'; }
 function hideDialog () { popupDialog.style.display = 'none'; }
 /*
- * Convenience function for passing a message to the popupDialog iframe
+ * Convenience functions for passing a message to an iframe
  */
-function tellChild () {
+function tellPopupDialog ()
+{
     var args = Array.prototype.slice.apply( arguments );
     popupDialog.contentWindow.postMessage( args, '*' );
 }
-/*
- * Function to specify the filesystem object, whose format is defined above.
- * In addition to creating the filesystem, if the `popupDialog` has not yet
- * been initialized, this initializes it.  We do that here because (a) we
- * cannot do it at the global scope, since the document body won't be
- * initialized yet, and (b) this function must be called before any dialog
- * can be shown anyway.
- */
-setFileSystem = window.setFileSystem = function ( fileSystem )
+function tellIFrame ()
 {
-    fileSystemBackEnd = fileSystem;
+    var args = Array.prototype.slice.apply( arguments );
+    var target = args.shift();
+    target.contentWindow.postMessage( args, '*' );
+}
+/*
+ * This function populates the popupDialog variable if and only if it has
+ * not already been populated, returning the (potentially newly created, or
+ * potentially cached) result.
+ */
+function getPopupDialog ()
+{
     if ( !popupDialog ) {
         popupDialog = document.createElement( 'iframe' );
-        popupDialog.setAttribute( 'src', './dialog.html' );
         popupDialog.style.position = 'absolute';
         popupDialog.style.top = '50%';
         popupDialog.style.left = '50%';
@@ -75,6 +77,31 @@ setFileSystem = window.setFileSystem = function ( fileSystem )
         hideDialog();
         document.body.appendChild( popupDialog );
     }
+    return popupDialog;
+}
+/*
+ * This function can be used to fill any iframe with the HTML required to be
+ * used as a File > Open/Save dialog.
+ */
+function fillIFrame ( iframe, callback )
+{
+    iframe.setAttribute( 'src', './dialog.html' );
+    function once () {
+        iframe.removeEventListener( 'load', once, false );
+        callback();
+    }
+    iframe.addEventListener( 'load', once, false );
+}
+
+/*
+ * Function to specify the filesystem object, whose format is defined above.
+ * The client must call this function before attempting to use any of the
+ * functions below that require a filesytem, such as openFile() or
+ * saveFile().
+ */
+setFileSystem = window.setFileSystem = function ( fileSystem )
+{
+    fileSystemBackEnd = fileSystem;
 }
 
 /*
@@ -145,6 +172,13 @@ function failureDebug () {
  * If the user doesn't log in to the service or cancels the dialog, the
  * failure callback will be called.
  *
+ * By default, this routine displays an iframe to contain the File > Open
+ * dialog it shows to the user.  If the client already has an iframe to use
+ * as the dialog, it can be passed as the third parameter, and will be used.
+ * That parameter is optional; if not provided, an iframe created by this
+ * module is used.  When providing an iframe, the client will need to be
+ * sure to hide/close it when either the success/failure callback is called.
+ *
  * Example use:
  *
  * // prompt the user with a File > Open dialog
@@ -157,38 +191,42 @@ function failureDebug () {
  *     }, function ( error ) { console.log( 'Fetch error:', error ); } );
  * }, function ( error ) { console.log( 'No file chosen:', error ); } );
  */
-openFile = window.openFile = function ( successCB, failureCB )
+openFile = window.openFile = function ( successCB, failureCB, iframe )
 {
     if ( !successCB ) successCB = successDebug;
     if ( !failureCB ) failureCB = failureDebug;
-    fileSystemBackEnd.getAccess( function () {
-        tellChild( 'setDialogType', 'open' );
-        messageHandler = function ( command, args ) {
-            if ( command == 'dialogBrowse' ) {
-                updatePath( args[0] );
-                openFile( successCB, failureCB );
-            } else if ( command == 'dialogOpen' ) {
-                hideDialog();
-                var path = lastVisitedPath.concat( [ args[0] ] );
-                successCB( {
-                    path : path,
-                    get : function ( succ, fail ) {
-                        if ( !succ ) succ = successDebug;
-                        if ( !fail ) fail = failureDebug;
-                        fileSystemBackEnd.readFile( path, succ, fail );
-                    }
-                } );
-            } else {
-                hideDialog();
-                failureCB( 'User canceled dialog.' );
-            }
-        };
-        fileSystemBackEnd.readFolder( lastVisitedPath, function ( list ) {
-            list.unshift( 'showList' );
-            tellChild.apply( null, list );
+    var dialog = iframe || getPopupDialog();
+    fillIFrame( dialog, function () {
+        fileSystemBackEnd.getAccess( function () {
+            tellIFrame( dialog, 'setDialogType', 'open' );
+            messageHandler = function ( command, args ) {
+                if ( command == 'dialogBrowse' ) {
+                    updatePath( args[0] );
+                    openFile( successCB, failureCB );
+                } else if ( command == 'dialogOpen' ) {
+                    if ( dialog != iframe ) hideDialog();
+                    var path = lastVisitedPath.concat( [ args[0] ] );
+                    successCB( {
+                        path : path,
+                        get : function ( succ, fail ) {
+                            if ( !succ ) succ = successDebug;
+                            if ( !fail ) fail = failureDebug;
+                            fileSystemBackEnd.readFile( path, succ, fail );
+                        }
+                    } );
+                } else {
+                    if ( dialog != iframe ) hideDialog();
+                    failureCB( 'User canceled dialog.' );
+                }
+            };
+            fileSystemBackEnd.readFolder( lastVisitedPath,
+                function ( list ) {
+                    list.unshift( 'showList' );
+                    tellIFrame.apply( null, [ dialog ].concat( list ) );
+                }, failureCB );
+            if ( dialog != iframe ) showDialog();
         }, failureCB );
-        showDialog();
-    }, failureCB );
+    } );
 }
 
 /*
@@ -220,6 +258,13 @@ openFile = window.openFile = function ( successCB, failureCB )
  * If the user doesn't log in to the service or cancels the dialog, the
  * failure callback will be called.
  *
+ * By default, this routine displays an iframe to contain the File > Open
+ * dialog it shows to the user.  If the client already has an iframe to use
+ * as the dialog, it can be passed as the third parameter, and will be used.
+ * That parameter is optional; if not provided, an iframe created by this
+ * module is used.  When providing an iframe, the client will need to be
+ * sure to hide/close it when either the success/failure callback is called.
+ *
  * Example use:
  *
  * // prompt the user with a File > Save dialog
@@ -232,39 +277,43 @@ openFile = window.openFile = function ( successCB, failureCB )
  *     }, function ( error ) { console.log( 'Write error:', error ); } );
  * }, function ( error ) { console.log( 'No destination chosen:', error ); } );
  */
-saveFile = window.saveFile = function ( successCB, failureCB )
+saveFile = window.saveFile = function ( successCB, failureCB, iframe )
 {
     if ( !successCB ) successCB = successDebug;
     if ( !failureCB ) failureCB = failureDebug;
-    fileSystemBackEnd.getAccess( function () {
-        tellChild( 'setDialogType', 'save' );
-        messageHandler = function ( command, args ) {
-            if ( command == 'dialogBrowse' ) {
-                updatePath( args[0] );
-                saveFile( successCB, failureCB );
-            } else if ( command == 'dialogSave' ) {
-                hideDialog();
-                var path = lastVisitedPath.concat( [ args[0] ] );
-                successCB( {
-                    path : path,
-                    update : function ( content, succ, fail ) {
-                        if ( !succ ) succ = successDebug;
-                        if ( !fail ) fail = failureDebug;
-                        fileSystemBackEnd.writeFile( path, content,
-                            succ, fail );
-                    }
-                } );
-            } else {
-                hideDialog();
-                failureCB( 'User canceled dialog.' );
+    var dialog = iframe || getPopupDialog();
+    fillIFrame( dialog, function () {
+        fileSystemBackEnd.getAccess( function () {
+            tellIFrame( dialog, 'setDialogType', 'save' );
+            messageHandler = function ( command, args ) {
+                if ( command == 'dialogBrowse' ) {
+                    updatePath( args[0] );
+                    saveFile( successCB, failureCB );
+                } else if ( command == 'dialogSave' ) {
+                    if ( dialog != iframe ) hideDialog();
+                    var path = lastVisitedPath.concat( [ args[0] ] );
+                    successCB( {
+                        path : path,
+                        update : function ( content, succ, fail ) {
+                            if ( !succ ) succ = successDebug;
+                            if ( !fail ) fail = failureDebug;
+                            fileSystemBackEnd.writeFile( path, content,
+                                succ, fail );
+                        }
+                    } );
+                } else {
+                    if ( dialog != iframe ) hideDialog();
+                    failureCB( 'User canceled dialog.' );
+                }
             }
-        }
-        fileSystemBackEnd.readFolder( lastVisitedPath, function ( list ) {
-            list.unshift( 'showList' );
-            tellChild.apply( null, list );
+            fileSystemBackEnd.readFolder( lastVisitedPath,
+                function ( list ) {
+                    list.unshift( 'showList' );
+                    tellIFrame.apply( null, [ dialog ].concat( list ) );
+                }, failureCB );
+            if ( dialog != iframe ) showDialog();
         }, failureCB );
-        showDialog();
-    }, failureCB );
+    } );
 }
 
 /*

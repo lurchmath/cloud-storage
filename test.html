@@ -54,6 +54,12 @@ Text you type here will be saved when you choose to save a file.</textarea>
         <textarea id='messagesPane' rows=10 cols=40 readonly
         >Success or failure messages will go here.</textarea>
 
+        <p>
+            <input type='button' value='Use dialog built into page'
+                   onclick='toggleDialog();'/>
+        </p>
+        <iframe id='testIFrame' style='display:none;'></iframe>
+
         <!--
         Event handler scripts supporting all the controls above, with some
         global variable initializations first.
@@ -111,6 +117,27 @@ Text you type here will be saved when you choose to save a file.</textarea>
                   + ( data ? JSON.stringify( data, null, 4 ) : '' );
             }
 
+            // Show or hide the built-in dialog, so the user can decide
+            // whether to test openFile()/saveFile() using a provided dialog
+            // or to make those functions create their own dialogs.
+            function getDialog () {
+                return document.getElementById( 'testIFrame' );
+            }
+            function toggleDialog () {
+                var dialog = getDialog();
+                if ( dialog.style.display == 'none' )
+                    dialog.setAttribute( 'src', 'about:blank' );
+                dialog.style.display = ( dialog.style.display == 'none' ) ?
+                    'block' : 'none';
+            }
+            // Get the dialog if and only if it's visible, otherwise yield
+            // null so that the test functions below will know to create
+            // their own dialogs.
+            function dialogIfVisible () {
+                var dialog = getDialog();
+                return ( dialog.style.display == 'block' ) ? dialog : null;
+            }
+
             // Event handler when the user clicks "Test opening a file."
             // In the various success and failure callbacks, populate one or
             // both of the two textareas with the results.
@@ -120,13 +147,16 @@ Text you type here will be saved when you choose to save a file.</textarea>
                         setMessages( 'User chose: ' + chosenFile.path, null,
                                      'File loaded successfully' );
                         setEditor( content );
+                        if ( dialogIfVisible() ) toggleDialog();
                     }, function ( error ) {
                         setMessages( 'User chose: ' + chosenFile.path,
                                      'Error', error );
+                        if ( dialogIfVisible() ) toggleDialog();
                     } );
                 }, function ( error ) {
                     setMessages( null, 'Error', error );
-                } );
+                    if ( dialogIfVisible() ) toggleDialog();
+                }, dialogIfVisible() );
             }
             // Event handler when the user clicks "Test saving a file."
             // In the various success and failure callbacks, populate one or
@@ -136,13 +166,16 @@ Text you type here will be saved when you choose to save a file.</textarea>
                     destination.update( getEditor(), function ( result ) {
                         setMessages( 'Destination: ' + destination.path,
                                      'Success', result );
+                        if ( dialogIfVisible() ) toggleDialog();
                     }, function ( error ) {
                         setMessages( 'Destination: ' + destination.path,
                                      'Error', error );
+                        if ( dialogIfVisible() ) toggleDialog();
                     } );
                 }, function ( error ) {
                     setMessages( null, 'Error', error );
-                } );
+                    if ( dialogIfVisible() ) toggleDialog();
+                }, dialogIfVisible() );
             }
         </script>
     </body>
