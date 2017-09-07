@@ -5,12 +5,6 @@ This project was put together rather quickly, and there are many polishing
 tasks that should be done to improve the overall quality of this module.
 I list them in this file.
 
-## Code style
-
- * The [cloud-storage.js file](cloud-storage.js) defines functions at global
-   scope.  Use IIFEs to hide all but the few functions that the module
-   should be exposing as its interface.
-
 ## Aesthetics
 
  * The open/save dialogs are extremely ugly, because near-zero CSS styling

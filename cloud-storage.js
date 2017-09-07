@@ -6,6 +6,8 @@
  * standard event handlers in their editor.
  */
 
+( function () {
+
 /*
  * Global variable to store the filesystem object that will permit reading
  * of folders, and reading and writing of files.  It must be an object
@@ -55,7 +57,7 @@ function tellChild () {
  * initialized yet, and (b) this function must be called before any dialog
  * can be shown anyway.
  */
-function setFileSystem ( fileSystem )
+setFileSystem = window.setFileSystem = function ( fileSystem )
 {
     fileSystemBackEnd = fileSystem;
     if ( !popupDialog ) {
@@ -155,7 +157,7 @@ function failureDebug () {
  *     }, function ( error ) { console.log( 'Fetch error:', error ); } );
  * }, function ( error ) { console.log( 'No file chosen:', error ); } );
  */
-function openFile ( successCB, failureCB )
+openFile = window.openFile = function ( successCB, failureCB )
 {
     if ( !successCB ) successCB = successDebug;
     if ( !failureCB ) failureCB = failureDebug;
@@ -230,7 +232,7 @@ function openFile ( successCB, failureCB )
  *     }, function ( error ) { console.log( 'Write error:', error ); } );
  * }, function ( error ) { console.log( 'No destination chosen:', error ); } );
  */
-function saveFile ( successCB, failureCB )
+saveFile = window.saveFile = function ( successCB, failureCB )
 {
     if ( !successCB ) successCB = successDebug;
     if ( !failureCB ) failureCB = failureDebug;
@@ -297,7 +299,7 @@ function saveFile ( successCB, failureCB )
  *     }
  * } ) );
  */
-function JSONFileSystem ( jsonObject )
+JSONFileSystem = window.JSONFileSystem = function ( jsonObject )
 {
     /*
      * Utility function for walking paths from the root into the filesystem
@@ -383,3 +385,9 @@ function JSONFileSystem ( jsonObject )
         }
     }
 }
+
+/*
+ * End of module IIFE.
+ */
+
+} )();
