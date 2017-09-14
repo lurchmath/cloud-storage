@@ -25,7 +25,7 @@ Call `openFile()` or `saveFile()`.  That's it!  Obviously, you'll want to
 pass parameters to those functions to customize what to save or what to do
 with opened files, so you should see the example in the next section, or the
 documented source code for those two functions, about half way through
-[cloud-storage.js](cloud-storage.js).
+[cloud-storage.js](https://github.com/lurchmath/cloud-storage/blob/master/cloud-storage.js).
 
 ## Example
 
@@ -51,7 +51,7 @@ Right now three data storage backends are supported.
    keeping the API here very simple.)
 
 To add a new backend, mimic the work done in
-[dropbox-backend.js](dropbox-backend.js) and create your own backend.
+[dropbox-backend.js](https://github.com/lurchmath/cloud-storage/blob/master/dropbox-backend.js) and create your own backend.
 Cloud storage providers besides Dropbox are welcome!
 
 There are other things that could be improved about this project.
