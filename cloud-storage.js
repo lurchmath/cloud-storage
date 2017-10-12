@@ -414,6 +414,7 @@ JSONFileSystem = window.JSONFileSystem = function ( jsonObject )
                     // The file does not exist.
                     // Does its parent folder exist?  Let's check.
                     try {
+                        fullPath = fullPath.slice();
                         var fileName = fullPath.pop();
                         var parentFolder = find( fullPath, 'folder' );
                         // Yes, it exists!  Create a new file there.
