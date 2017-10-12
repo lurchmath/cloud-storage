@@ -172,6 +172,11 @@ function failureDebug () {
  * If the user doesn't log in to the service or cancels the dialog, the
  * failure callback will be called.
  *
+ * The object passed to the success callback also contains an `update`
+ * member, which can be used to save new content over top of the content of
+ * the file opened using this method.  See details in the `saveFile`
+ * function implemented, after the `openFile` function, further below.
+ *
  * By default, this routine displays an iframe to contain the File > Open
  * dialog it shows to the user.  If the client already has an iframe to use
  * as the dialog, it can be passed as the third parameter, and will be used.
@@ -212,6 +217,12 @@ openFile = window.openFile = function ( successCB, failureCB, iframe )
                             if ( !succ ) succ = successDebug;
                             if ( !fail ) fail = failureDebug;
                             fileSystemBackEnd.readFile( path, succ, fail );
+                        },
+                        update : function ( content, succ, fail ) {
+                            if ( !succ ) succ = successDebug;
+                            if ( !fail ) fail = failureDebug;
+                            fileSystemBackEnd.writeFile( path, content,
+                                succ, fail );
                         }
                     } );
                 } else {
@@ -229,13 +240,6 @@ openFile = window.openFile = function ( successCB, failureCB, iframe )
     } );
 }
 
-/*
- * Failure callback will have reason as a string parameter.
- * Success callback will have an object with file metadata, and a method
- * for resaving the file, update(newContent,successCB,failureCB), in which
- * the first callback will yield a new object to replace the old, and the
- * second will have an error message.
- */
 /*
  * Show a "File > Save" dialog box.
  *

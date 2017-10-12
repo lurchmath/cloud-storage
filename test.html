@@ -41,6 +41,8 @@ A page for testing the cloud storage module defined in this repository.
                    onclick='testOpenFile();'/>
             <input type='button' value='Test saving a file'
                    onclick='testSaveFile();'/>
+            <input type='button' value='Test re-saving the same file'
+                   onclick='testResaveFile();'/>
         </p>
 
         <!--
@@ -138,11 +140,16 @@ Text you type here will be saved when you choose to save a file.</textarea>
                 return ( dialog.style.display == 'block' ) ? dialog : null;
             }
 
+            // Global variable used to store the last result of a success
+            // callback from any of the functions below.  Necessary to
+            // implement the "re-save the same file" feature.
+            var lastFileObject = null;
             // Event handler when the user clicks "Test opening a file."
             // In the various success and failure callbacks, populate one or
             // both of the two textareas with the results.
             function testOpenFile () {
                 openFile( function ( chosenFile ) {
+                    lastFileObject = chosenFile;
                     chosenFile.get( function ( content ) {
                         setMessages( 'User chose: ' + chosenFile.path, null,
                                      'File loaded successfully' );
@@ -154,6 +161,7 @@ Text you type here will be saved when you choose to save a file.</textarea>
                         if ( dialogIfVisible() ) toggleDialog();
                     } );
                 }, function ( error ) {
+                    lastFileObject = null;
                     setMessages( null, 'Error', error );
                     if ( dialogIfVisible() ) toggleDialog();
                 }, dialogIfVisible() );
@@ -163,6 +171,7 @@ Text you type here will be saved when you choose to save a file.</textarea>
             // both of the two textareas with the results.
             function testSaveFile () {
                 saveFile( function ( destination ) {
+                    lastFileObject = destination;
                     destination.update( getEditor(), function ( result ) {
                         setMessages( 'Destination: ' + destination.path,
                                      'Success', result );
@@ -173,9 +182,35 @@ Text you type here will be saved when you choose to save a file.</textarea>
                         if ( dialogIfVisible() ) toggleDialog();
                     } );
                 }, function ( error ) {
+                    lastFileObject = null;
                     setMessages( null, 'Error', error );
                     if ( dialogIfVisible() ) toggleDialog();
                 }, dialogIfVisible() );
+            }
+            // Event handler when the user clicks "Test re-saving the same
+            // file."  In the various success and failure callbacks,
+            // populate one or both of the two textareas with the results.
+            function testResaveFile () {
+                if ( !lastFileObject ) {
+                    setMessages( null, 'Error',
+                        'You have not yet successfully opened or saved a '
+                      + ' file, and so you cannot re-save to the "same" '
+                      + ' location.' );
+                } else {
+                    lastFileObject.update( getEditor(),
+                        function ( result ) {
+                            setMessages( 'Destination: '
+                                       + lastFileObject.path,
+                                         'Success', result );
+                            if ( dialogIfVisible() ) toggleDialog();
+                        }, function ( error ) {
+                            setMessages( 'Destination: '
+                                       + lastFileObject.path,
+                                         'Error', error );
+                            if ( dialogIfVisible() ) toggleDialog();
+                        }
+                    );
+                }
             }
         </script>
     </body>
