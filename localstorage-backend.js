@@ -10,7 +10,7 @@
  * files must exist inside a single root directory, and so the only valid
  * paths are those of the form "/some_filename".
  *
- * The class defined hereing obeys the constraints set out in the
+ * The class defined herein obeys the constraints set out in the
  * documentation at the top of the file cloud-storage.js in this folder.
  */
 
