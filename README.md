@@ -13,12 +13,12 @@ need a different toolkit.
 Import the relevant files into your page.  You can use a CDN, like so:
 ```html
 <!-- The main file, essential: -->
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1.0.0/cloud-storage.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/cloud-storage.js'></script>
 <!-- If you want the Dropbox backend, which you probably do: -->
 <script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'></script>
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1.0.0/dropbox-backend.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/dropbox-backend.js'></script>
 <!-- If you want the LocalStorage backend also: -->
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1.0.0/localstorage-backend.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/localstorage-backend.js'></script>
 ```
 
 Call `openFile()` or `saveFile()`.  That's it!  Obviously, you'll want to

@@ -26,10 +26,19 @@
  * This function stores the client ID in this object for use by a Dropbox
  * instance to be created later, once an access token is gained by the
  * login process in `getAccess()`.
+ *
+ * The second parameter is optional, but can provide a URL to use for the
+ * Dropbox login page.  By default, it uses the page in this same folder.
+ * However, if you have loaded this project from a CDN, then you may not
+ * have that file in your project.  In such a case, you can provide the CDN
+ * URL to teh Dropbox login page as the second parameter here.  For your
+ * convenience, that URL is:
+ * https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/dropbox-login.html
  */
-function DropboxFileSystem ( clientID )
+function DropboxFileSystem ( clientID, loginURL )
 {
     this.clientID = clientID;
+    this.loginURL = loginURL || './dropbox-login.html';
 }
 
 /*
@@ -44,7 +53,7 @@ function DropboxFileSystem ( clientID )
 DropboxFileSystem.prototype.getAccess = function ( successCB, failureCB )
 {
     if ( this.dropbox ) return successCB();
-    var loginWindow = window.open( './dropbox-login.html' );
+    var loginWindow = window.open( this.loginURL );
     var that = this;
     if ( !this.installedEventHandler ) {
         window.addEventListener( 'message', function ( event ) {
