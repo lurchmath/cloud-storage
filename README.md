@@ -27,6 +27,12 @@ with opened files, so you should see the example in the next section, or the
 documented source code for those two functions, about half way through
 [cloud-storage.js](https://github.com/lurchmath/cloud-storage/blob/master/source/cloud-storage.js).
 
+Furthermore, if you import the Dropbox backend, you will *need* to copy
+[the login handler page](release/dropbox-login.html) into the same folder as
+the page including the scripts.  Furthermore, you'll need to permit your
+Dropbox app to redirect to that page, using [the Dropbox Developer app
+dashboard](https://www.dropbox.com/developers/apps).
+
 ## Example
 
 See the [simple example
