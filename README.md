@@ -13,7 +13,7 @@ need a different toolkit.
 Import the relevant files into your page.  You can use a CDN, like so:
 ```html
 <!-- The main file, essential: -->
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2/release/cloud-storage.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2.0.1/release/cloud-storage.js'></script>
 <!-- If you want the Dropbox backend, which you probably do: -->
 <script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'></script>
 <script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2/release/dropbox-backend.js'></script>
