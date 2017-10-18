@@ -1,0 +1,25 @@
+{
+  "name": "cloud-storage",
+  "version": "2.0.0",
+  "description": "JS API for interacting with cloud storage filesystems",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lurchmath/cloud-storage.git"
+  },
+  "author": "Nathan Carter (ncarter@bentley.edu)",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/lurchmath/cloud-storage/issues"
+  },
+  "homepage": "https://github.com/lurchmath/cloud-storage#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-add-src": "^0.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-each": "^0.5.0",
+    "gulp-embed": "^1.1.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0"
+  }
+}

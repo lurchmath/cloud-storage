@@ -13,28 +13,28 @@ need a different toolkit.
 Import the relevant files into your page.  You can use a CDN, like so:
 ```html
 <!-- The main file, essential: -->
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/cloud-storage.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2/release/cloud-storage.js'></script>
 <!-- If you want the Dropbox backend, which you probably do: -->
 <script src='https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js'></script>
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/dropbox-backend.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2/release/dropbox-backend.js'></script>
 <!-- If you want the LocalStorage backend also: -->
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v1/localstorage-backend.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2/release/localstorage-backend.js'></script>
 ```
 
 Call `openFile()` or `saveFile()`.  That's it!  Obviously, you'll want to
 pass parameters to those functions to customize what to save or what to do
 with opened files, so you should see the example in the next section, or the
 documented source code for those two functions, about half way through
-[cloud-storage.js](https://github.com/lurchmath/cloud-storage/blob/master/cloud-storage.js).
+[cloud-storage.js](https://github.com/lurchmath/cloud-storage/blob/master/source/cloud-storage.js).
 
 ## Example
 
-See the [simple test
-page](http://lurchmath.github.io/cloud-storage/test.html) for an example of
-how the various storage options and functions work.
+See the [simple example
+page](http://lurchmath.github.io/cloud-storage/example/example.html) for an
+example of how the various storage options and functions work.
 
 The source code for that page [is documented with
-comments](https://github.com/lurchmath/cloud-storage/blob/master/test.html).
+comments](https://github.com/lurchmath/cloud-storage/blob/master/example/example.html).
 
 ## Status
 
@@ -51,7 +51,7 @@ Right now three data storage backends are supported.
    keeping the API here very simple.)
 
 To add a new backend, mimic the work done in
-[dropbox-backend.js](https://github.com/lurchmath/cloud-storage/blob/master/dropbox-backend.js) and create your own backend.
+[dropbox-backend.js](https://github.com/lurchmath/cloud-storage/blob/master/source/dropbox-backend.js) and create your own backend.
 Cloud storage providers besides Dropbox are welcome!
 
 There are other things that could be improved about this project.
