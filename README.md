@@ -13,7 +13,7 @@ need a different toolkit.
  1. Import the relevant files into your page.  You need at least the main
     file, `cloud-storage.js`.  You can use a CDN, like so:
 ```html
-<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2.0.1/release/cloud-storage.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/lurchmath/cloud-storage@v2.1/release/cloud-storage.js'></script>
 ```
  2. Import whatever back-ends you want to use for storage.  Here are the
     two that are currently supported.
