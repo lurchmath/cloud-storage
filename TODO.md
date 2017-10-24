@@ -5,11 +5,6 @@ This project was put together rather quickly, and there are many polishing
 tasks that should be done to improve the overall quality of this module.
 I list them in this file.
 
-## Functionality
-
- * When the file browser, show a "loading..." message until it is
-   populated.
-
 ## Aesthetics
 
  * The open/save dialogs are extremely ugly, because near-zero CSS styling
@@ -21,8 +16,8 @@ I list them in this file.
     * The Open, Save, and Cancel buttons are defined in
       [dialog.html](dialog.html), and you can see their element types and
       IDs there.
-    * In that same HTML file you will find the IDs for the files list and
-      buttons footer.
+    * In that same HTML file you will find the IDs for the files list, the
+      buttons footer, and the "Loading..." text.
     * Other tidbits appear in the existing [dialog.css](dialog.css) file.
  * Consider replacing them entirely with
    [jquery.filebrowser](https://github.com/jcubic/jquery.filebrowser)
