@@ -13,8 +13,8 @@
   },
   "homepage": "https://github.com/lurchmath/cloud-storage#readme",
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-add-src": "^0.2.0",
+    "gulp": "^4.0.0",
+    "gulp-add-src": "^1.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-each": "^0.5.0",
     "gulp-embed": "^1.1.1",

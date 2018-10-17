@@ -89,15 +89,17 @@ gulp.task( 'minify-login-page', function () {
  * provided.  This task just copies the minified login page from the release
  * folder to the example folder.
  */
-gulp.task( 'build-example', [ 'minify-login-page' ], function () {
-    return gulp.src( 'release/dropbox-login.html' )
-               .pipe( gulp.dest( 'example/' ) );
-} );
+gulp.task( 'build-example',
+    gulp.series( 'minify-login-page', function () {
+        return gulp.src( 'release/dropbox-login.html' )
+                   .pipe( gulp.dest( 'example/' ) );
+    } )
+);
 
 /*
  * The default build task is to do everything.
  */
-gulp.task( 'default', [ 'build-main-script',
-                        'minify-backends',
-                        'minify-login-page',
-                        'build-example' ] );
+gulp.task( 'default', gulp.series( 'build-main-script',
+                                   'minify-backends',
+                                   'minify-login-page',
+                                   'build-example' ) );
